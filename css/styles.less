@@ -1,0 +1,191 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:800,300,400);
+
+body, h1, h2, h3, h4, h5, ul, li, html, p {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+
+.color {
+    &-goldfish {
+        color: #F38630;
+    }
+}
+
+body {
+    font: .875em sans-serif;
+    width: 100%;
+    background: #f7f5e7;
+    line-height: 1.5;
+}
+
+body > header {
+    margin: 5em auto 0 auto;
+    h2 {
+        text-align: center;
+        line-height: 1;
+        font-family: "open sans";
+        font-size: 3em;
+    }
+}
+
+.main {
+    
+    .page {
+        width: 100%;
+        position: absolute;
+        left: 100%;
+        opacity: 0;
+        display: none;
+        
+        &.present {
+            left: 0%;
+            opacity: 1;
+            display: block;
+        }
+        
+        .arrow {
+            font-size: 5em;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            color: #F38630; 
+            position: absolute;
+            text-decoration: none;
+        }
+         
+        .left {
+            right: 1em;
+            &:after {
+                content: "\003e";
+            }
+        }
+        
+        .right {
+            left: 1em;
+            &:after{
+                content: "\003c";
+            }
+        }
+        
+        .container {
+            width: 60em;
+            margin: 0 auto 0 auto;
+        
+            & > header {
+                text-align: center;
+                line-height: 1;
+                font-family: "open sans";
+                h1 {
+                    text-transform: uppercase;
+                    font-size: 8em;
+                    margin-top: -.1em;        
+                }
+            }
+        }
+    }
+}
+
+.grid {
+    margin-top: 3em;
+    
+    article {
+        font-family: 'Open Sans','Times New Roman', serif;
+        position: relative;
+        width: 28em;
+        float: left;
+        -webkit-font-smoothing: antialiased;
+        
+        &:nth-child(odd) {
+            padding-right: .9em;
+        }
+        
+        &:nth-child(even) {
+            padding-left: .9em;
+        }
+        
+        /*&:nth-child(even)::after {
+            content:"";
+            background: #666;
+            position: absolute;
+            bottom: 10%;
+            left: 0;
+            height: 80%;
+            width: 1px;
+        }*/
+        
+        .logo {
+            position: absolute;
+            top: 0;
+            
+            img {
+                width: 6em;
+            }
+        }
+        
+        .content {
+            margin: 0 0 0 7em;
+            color: #333;
+            
+            h3 {
+                text-transform: uppercase;
+                color: #bc360a;
+            }
+            
+            p {
+                margin: .7em 0 .7em 0;
+            }
+            
+            .type {
+                font-style: italic;
+            }
+            
+            .description {
+                font-weight: 300;
+                text-align: justify;
+            }
+            
+            .links {
+                font-style: italic;
+                font-size: .8em;
+                a {
+                    color: #bc360a;
+                    vertical-align: top;
+                    text-decoration: none;
+                }
+                
+                a:hover, a:focus {
+                    text-decoration: underline;
+                }
+                
+                .icon {
+                    width: 1.5em;
+                    height: 1.5em;
+                    display: inline-block;
+                    margin-right: .5em;
+                }
+                
+                .google-play-store {
+                    content: url("http://developer.android.com/images/brand/Google_Play_Store_48.png");
+                }
+            }
+        }
+    }
+}
+
+.blog {
+    text-align: center;
+    vertical-align: center;
+    margin-top: 12em;
+    a {
+        text-decoration: none;
+        font-family: 'Open Sans';
+        font-weight: 300;
+        font-style: italic;
+        color: #F38630;
+        font-size: 2em;
+    }
+    
+    a:hover, a:focus {
+        text-decoration: underline;
+    }
+}
