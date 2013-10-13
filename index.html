@@ -2,26 +2,28 @@
 
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-
-  <title>The HTML5 Herald</title>
-  <meta name="description" content="The HTML5 Herald">
-  <meta name="author" content="SitePoint">
-
-  <link rel="stylesheet" href="css/styles.css?v=1.0">
-
-  <!--[if lt IE 9]>
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
+    <meta charset="utf-8">
+    
+    <title>The HTML5 Herald</title>
+    <meta name="description" content="The HTML5 Herald">
+    <meta name="author" content="SitePoint">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+    
+    <!--[if lt IE 9]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 </head>
 
 <body>
     <header>
         <h2>Alex Wendland<span class="color-goldfish">'</span><span id="test">s</span></h2>
     </header>
-    <section class="main">
+    <section class="slider">
         <section class="page present" name="portfolio">
-            <a class="arrow left slide-left" href="#blog"></a>
+            <a class="arrow left internal" href="#blog"></a>
             <div class="container">
                 <header>
                     <h1>Portfolio</h1>
@@ -58,7 +60,7 @@ Cloc was created to do this one function and to do it well.</p>
             </div>
         </section>
         <section class="page" name="blog">
-            <a class="arrow right slide-right" href="#portfolio"></a>
+            <a class="arrow right internal" href="#portfolio"></a>
             <div class="container">
                 <header>
                     <h1>Blog</h1>
@@ -71,6 +73,7 @@ Cloc was created to do this one function and to do it well.</p>
     </section>
     
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="vendor/jquery.history.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
