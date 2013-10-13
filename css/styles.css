@@ -13,18 +13,22 @@ p {
   padding: 0px;
   list-style: none;
 }
+::selection {
+  background: rgba(255, 183, 183, 0.3);
+}
 .color-goldfish {
   color: #F38630;
 }
 body {
-  font: 0.875em sans-serif;
+  font: 0.95em sans-serif;
   width: 100%;
-  background: #f7f5e7;
+  background: #F7F4E0;
   line-height: 1.5;
   overflow-x: hidden;
+  padding-bottom: 1em;
 }
 body > header {
-  margin: 5em auto 0 auto;
+  margin: 3em auto 0 auto;
 }
 body > header h2 {
   text-align: center;
@@ -38,6 +42,7 @@ body > header h2 {
   left: 100%;
   opacity: 0;
   display: none;
+  padding-bottom: 1em;
 }
 .slider .page.present {
   left: 0%;
@@ -45,27 +50,27 @@ body > header h2 {
   display: block;
 }
 .slider .page .arrow {
-  font-size: 5em;
+  font-size: 3.5em;
   font-family: 'Open Sans', sans-serif;
   font-weight: 800;
   color: #F38630;
   position: absolute;
   text-decoration: none;
 }
-.slider .page .left {
-  right: 1em;
+.slider .page .arrow.left {
+  right: .5em;
 }
-.slider .page .left:after {
+.slider .page .arrow.left:after {
   content: "\003e";
 }
-.slider .page .right {
-  left: 1em;
+.slider .page .arrow.right {
+  left: .5em;
 }
-.slider .page .right:after {
+.slider .page .arrow.right:after {
   content: "\003c";
 }
 .slider .page .container {
-  width: 60em;
+  width: 100%;
   margin: 0 auto 0 auto;
 }
 .slider .page .container > header {
@@ -75,7 +80,7 @@ body > header h2 {
 }
 .slider .page .container > header h1 {
   text-transform: uppercase;
-  font-size: 8em;
+  font-size: 6em;
   margin-top: -0.1em;
 }
 .grid {
@@ -84,9 +89,9 @@ body > header h2 {
 .grid article {
   font-family: 'Open Sans', 'Times New Roman', serif;
   position: relative;
-  width: 28em;
-  float: left;
+  width: 80%;
   -webkit-font-smoothing: antialiased;
+  margin: 0 auto;
   /*&:nth-child(even)::after {
             content:"";
             background: #666;
@@ -97,12 +102,6 @@ body > header h2 {
             width: 1px;
         }*/
 
-}
-.grid article:nth-child(odd) {
-  padding-right: .9em;
-}
-.grid article:nth-child(even) {
-  padding-left: .9em;
 }
 .grid article .logo {
   position: absolute;
@@ -167,4 +166,87 @@ body > header h2 {
 .blog a:hover,
 .blog a:focus {
   text-decoration: underline;
+}
+@media screen and (min-width: 35em) {
+  body > header {
+    margin: 3em auto 0 auto;
+  }
+  body > header h2 {
+    font-size: 2em;
+  }
+  .slider .page .arrow {
+    font-size: 3.5em;
+  }
+  .slider .page .container > header h1 {
+    font-size: 6em;
+  }
+}
+@media screen and (min-width: 48em) {
+  body > header {
+    margin: 3em auto 0 auto;
+  }
+  body > header h2 {
+    font-size: 2em;
+  }
+  .slider .page .arrow {
+    font-size: 4em;
+  }
+  .slider .page .container > header h1 {
+    font-size: 7em;
+  }
+}
+@media screen and (min-width: 57em) {
+  body > header {
+    margin: 5em auto 0 auto;
+  }
+  body > header h2 {
+    font-size: 3em;
+  }
+  .slider .page .arrow {
+    font-size: 5em;
+  }
+  .slider .page .container {
+    width: 60em;
+  }
+  .slider .page .container > header h1 {
+    font-size: 8em;
+  }
+}
+@media screen and (min-width: 60em) {
+  .grid article {
+    float: left;
+    margin: 0 0;
+    width: 29em;
+  }
+  .grid article:nth-child(odd) {
+    padding-right: .9em;
+  }
+  .grid article:nth-child(even) {
+    padding-left: .9em;
+  }
+}
+@media screen and (min-width: 65em) {
+  .slider .page .arrow.right {
+    left: 1em;
+  }
+  .slider .page .arrow.left {
+    right: 1em;
+  }
+}
+@media screen and (max-width: 42em) {
+  body {
+    background: #ff0000;
+  }
+  body > header {
+    margin: 3em auto 0 auto;
+  }
+  body > header h2 {
+    font-size: 1em;
+  }
+  .slider .page .arrow {
+    top: -2em;
+  }
+  .slider .page .container > header h1 {
+    font-size: 6em;
+  }
 }
