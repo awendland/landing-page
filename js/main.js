@@ -32,7 +32,7 @@ function state_change(newPage) {
             currPageIndex = i;
     }
     var nextPageIndex = isNaN(newPage) ? pageNames.indexOf(newPage) : newPage;
-    if (nextPageIndex === -1)
+    if (!/[0-9]+/.test(nextPageIndex))
         nextPageIndex = 0;
     if (!isNaN(currPageIndex) && nextPageIndex !== currPageIndex)
         slide($(pages[currPageIndex]), $(pages[nextPageIndex]), currPageIndex - nextPageIndex > 0 ? 1 : -1);
