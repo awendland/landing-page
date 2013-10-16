@@ -150,6 +150,9 @@ body > header h2 {
 .grid article .content .links .google-play-store {
   content: url("http://developer.android.com/images/brand/Google_Play_Store_48.png");
 }
+.grid article .content .links .github {
+  content: url("https://github.com/favicon.ico");
+}
 .blog {
   text-align: center;
   vertical-align: center;
