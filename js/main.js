@@ -2,11 +2,14 @@ jQuery.browser={};(function(){jQuery.browser.msie=false;
 jQuery.browser.version=0;if(navigator.userAgent.match(/MSIE ([0-9]+)\./)){
 jQuery.browser.msie=true;jQuery.browser.version=RegExp.$1;}})();
 
+function getHash() {
+    return window.location.hash.replace(/^#/,'');
+}
+
 if (("onhashchange" in window) && !($.browser.msie)) { 
     //modern browsers 
     $(window).bind('hashchange', function() {
-        var hash = window.location.hash.replace(/^#/,'');
-        state_change(hash);
+        state_change(getHash());
     });
 } else {
     //IE and browsers that don't support hashchange
@@ -15,6 +18,13 @@ if (("onhashchange" in window) && !($.browser.msie)) {
         state_change(hash);
     });
 }
+
+$('html').hammer({swipe_velocity: 0.15}).on("swiperight swipeleft", function(event) {
+    if (event.type.indexOf("right") !== -1 && getHash() !== "portfolio")
+        window.location.hash = "#portfolio";
+    else if (event.type.indexOf("left") !== -1 && getHash() !== "blog" ) 
+        window.location.hash = "#blog";
+});
 
 pages = $(".page");
 pageNames = [];
@@ -34,8 +44,9 @@ function state_change(newPage) {
     var nextPageIndex = isNaN(newPage) ? pageNames.indexOf(newPage) : newPage;
     if (!/[0-9]+/.test(nextPageIndex))
         nextPageIndex = 0;
-    if (!isNaN(currPageIndex) && nextPageIndex !== currPageIndex)
+    if (!isNaN(currPageIndex) && nextPageIndex !== currPageIndex) {
         slide($(pages[currPageIndex]), $(pages[nextPageIndex]), currPageIndex - nextPageIndex > 0 ? 1 : -1);
+    }
 }
 
 function slide(currPage, nextPage, direction) {
