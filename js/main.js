@@ -1,39 +1,75 @@
+/* 
+ * ###########################
+ * Shims/Fixes/Browser Support
+ * ###########################
+ */
+
+/* onHashChange fix for IE and other ... unsatisfactory... browsers */
 jQuery.browser={};(function(){jQuery.browser.msie=false;
 jQuery.browser.version=0;if(navigator.userAgent.match(/MSIE ([0-9]+)\./)){
 jQuery.browser.msie=true;jQuery.browser.version=RegExp.$1;}})();
 
+if (("onhashchange" in window) && !($.browser.msie)) { 
+    $(window).bind('hashchange', function() { //modern browsers 
+        state_change(getHash());
+    });
+} else {
+    state_change(getHash());
+    $('a.hash').bind('click', function() { //IE and browsers that don't support hashchange
+        changeHash($(this).attr('href').replace(/^#/,''));
+    });
+}
+
+function changeHash(hash) {
+    window.location.hash = "#" + hash;
+    if (!("onhashchange" in window) || ($.browser.msie))
+        $(window).trigger("onHashChange", {newHash: hash});
+}
+
+/**
+ * Link vendor prefixed or create a setTimeout based shim for browsers that don't support requestAnimationFrame.
+ */
+(function(){var e=0;var t=["webkit","moz"];for(var n=0;n<t.length&&!window.requestAnimationFrame;++n){window.requestAnimationFrame=window[t[n]+"RequestAnimationFrame"];window.cancelAnimationFrame=window[t[n]+"CancelAnimationFrame"]||window[t[n]+"CancelRequestAnimationFrame"]}if(!window.requestAnimationFrame)window.requestAnimationFrame=function(t,n){var r=(new Date).getTime();var i=Math.max(0,16-(r-e));var s=window.setTimeout(function(){t(r+i)},i);e=r+i;return s};if(!window.cancelAnimationFrame)window.cancelAnimationFrame=function(e){clearTimeout(e)}}());
+
+/**
+ * Returns the current URL hash
+ */
 function getHash() {
     return window.location.hash.replace(/^#/,'');
 }
 
-if (("onhashchange" in window) && !($.browser.msie)) { 
-    //modern browsers 
-    $(window).bind('hashchange', function() {
-        state_change(getHash());
-    });
-} else {
-    //IE and browsers that don't support hashchange
-    $('a.internal').bind('click', function() {
-        var hash = $(this).attr('href').replace(/^#/,'');
-        state_change(hash);
-    });
-}
+/*
+ * #############
+ * Website logic
+ * #############
+ */
 
-$('html').hammer({swipe_velocity: 0.15}).on("swiperight swipeleft", function(event) {
-    if (event.type.indexOf("right") !== -1 && getHash() !== "portfolio")
-        window.location.hash = "#portfolio";
-    else if (event.type.indexOf("left") !== -1 && getHash() !== "blog" ) 
-        window.location.hash = "#blog";
+/* Handle Hash Change events */
+$(window).on('onHashChange', function (e, o) {
+    state_change(o.newHash);
 });
 
+/* Handle swipe events. Change swipe_veolicty to 0.15 to make swiping more natural on mobile. */
+$('html').hammer({swipe_velocity: 0.15}).on("swiperight swipeleft", function(event) {
+    if (event.type.indexOf("right") !== -1 && getHash() !== "portfolio")
+        changeHash("portfolio");
+    else if (event.type.indexOf("left") !== -1 && getHash() !== "blog" ) 
+        changeHash("blog");
+});
+
+/* Build list of pages in sliding container */
 pages = $(".page");
 pageNames = [];
 pages.each(function () {
     pageNames.push($(this).attr("name"));
 });
 
-state_change(window.location.hash.replace(/^#/,''));
+/* Update displayed page to current hash on page load, if it hasn't already occurred */
+//state_change(getHash());
 
+/**
+ * Wrapper for easily controlling page transitions/flow.
+ */
 function state_change(newPage) {
     var currPageIndex;
     for (var i = 0; i < pages.length; i++) {
@@ -44,11 +80,14 @@ function state_change(newPage) {
     var nextPageIndex = isNaN(newPage) ? pageNames.indexOf(newPage) : newPage;
     if (!/[0-9]+/.test(nextPageIndex))
         nextPageIndex = 0;
-    if (!isNaN(currPageIndex) && nextPageIndex !== currPageIndex) {
+    if (!isNaN(currPageIndex) && nextPageIndex !== currPageIndex && nextPageIndex > -1) {
         slide($(pages[currPageIndex]), $(pages[nextPageIndex]), currPageIndex - nextPageIndex > 0 ? 1 : -1);
     }
 }
 
+/**
+ * Transition between pages.
+ */
 function slide(currPage, nextPage, direction) {
     currPage.animate({
             left: String(direction*100) + '%',
@@ -70,152 +109,168 @@ function slide(currPage, nextPage, direction) {
         });
 }
 
-/*##############################################################################################*/
+/* ###############
+ * OnBlogPage Show
+ * ###############
+ */
 
+// Experiencing errors with unloaded DOM and double-triggers
+var countdown = new CountdownCircle(document.getElementById("countdown"));
+countdown.onDelayedEnd(function() {
+    window.location.href = "http://alexwendland.com/blog";
+}, 1000);
+countdown.create(5000);
 $('[name="blog"]').on("pageShow", function() {
+    console.log(Date.now());
+    countdown.delayedStart(5000, 1000);
 });
 
 $('[name="blog"]').on("pageHide", function() {
+    countdown.pause();
+    countdown.create(5000);
 });
 
-/*
-$('[name="blog"]').on("pageShow", function() {
-    loader.resume();
-});
+/**
+ * Timer
+ */
+function CountdownCircle(elem, opt) {
+    var self = this;
 
-$('[name="blog"]').on("pageHide", function() {
-    loader.pause();
-});
-
-function Loadr(id) {
-    // # Defines
-    const max_size = 24;
-    const max_particles = 1500;
-    const min_vel = 20;
-    const max_generation_per_frame = 10;
-
-    // #Variables
-    var canvas = document.getElementById(id);
-    var ctx = canvas.getContext('2d');
-    var height = canvas.height;
-    var center_y = height/2;
-    var width = canvas.width;
-    var center_x = width / 2;
-    var animate = true;
-    var particles = [];
-    var last = Date.now(),now = 0;
-    var died = 0,len = 0,dt;
+    self.main = elem;
+    // Setup element DOM
+    self.bg = document.createElement('canvas');
+    self.bg.className = "countdown-canvas";
+    self.main.appendChild(self.bg);
+    self.rt = document.createElement('span');
+    self.rt.className = "countdown-text";
+    self.main.appendChild(self.rt);
+    // Get canvas context
+    self.ctx = self.bg.getContext('2d');
+    // Generate constants
+    self.circ = Math.PI * 2;
+    self.quart = Math.PI / 2;
     
-    // #State Variables
-    var pause = false;
+    // Get config
+    opt = opt || {};
+    self.conf = {
+        color: opt.color || '#bc360a',
+        lineWidth: opt.lineWidth || 20.0,
+        height: opt.height || elem.offsetHeight,
+        width: opt.width || elem.offsetWidth
+    };
+    
+    // Setup generated element layout-styles
+    self.main.height = self.conf.height;
+    self.main.width = self.conf.width;
+    self.bg.width = self.conf.width;
+    self.bg.height = self.conf.height;
+    self.rt.style.position = "absolute";
+    console.log(self.rt.style.fontSize);
+    self.rt.style.top = String((self.conf.height - self.rt.offsetHeight) / 2) + "px";
+    self.rt.style.left = "0px"
+    self.rt.style.textAlign = "center";
+    self.rt.style.width = "100%";
 
-    function isInsideHeart(x,y){
-        x = ((x - center_x) / (center_x)) * 3;
-        y = ((y - center_y) / (center_y)) * -3;
-        // Simplest Equation of lurve
-        var x2 = x * x;
-        var y2 = y * y;
-        // Simplest Equation of lurve
-        return (Math.pow((x2 + y2 - 1), 3) - (x2 * (y2 * y)) < 0);
+    // Setup canvas styles
+    self.ctx.beginPath();
+    self.ctx.strokeStyle = self.conf.color;
+    self.ctx.closePath();
+    self.ctx.fill();
+    self.ctx.lineWidth = self.conf.lineWidth;
+    
+    // Store blank canvas data
+    self.imd = self.ctx.getImageData(0, 0, self.conf.width, self.conf.height);
+
+    // Countdown timers
+    self.timeLeft;
+    self.totalTime;
+    self.prevTime;
+    
+    // Function to trigger on callback
+    self.endCallback;
+    
+    // Setup pause/resume onClick handler
+    self.main.addEventListener('click', function() {
+        if (self.paused)
+            self.resume();
+        else
+            self.pause();
+    }, false);
+
+    self.onEnd = function (f) {
+        self.endCallback = f;
+    };
+    
+    self.onDelayedEnd = function (f, delay) {
+        self.endCallback = function() {
+            setTimeout(function() {
+                if (!self.paused)
+                    f();
+            }, delay);
+        };
+    };
+
+    self.create = function (time) {
+        self.updateCircle(0, -1);
+        self.updateText(time);
+    };
+
+    self.delayedStart = function (totalTime, delay) {
+        setTimeout(function () {
+            self.start(totalTime)
+        }, delay);
     }
-    function random(size,freq){
-        var val = 0;
-        var iter = freq;
-        do{
-            size /= iter;
-            iter += freq;
-            val += size * Math.random();
-        }while( size >= 1);
-        return val;
+
+    self.start = function (totalTime) {
+        self.timeLeft = totalTime - 1;
+        self.totalTime = totalTime;
+        self.paused = false;
+        self.prevTime = null;
+        self.countdown();
+    };
+
+    self.paused = false;
+
+    self.pause = function () {
+        self.paused = true;
+    };
+    
+    self.set = function(progress, max) {
+        self.updateCircle(progress, max);
+        self.updateText(progress);
     }
-    function Particle(){
-        var x = center_x;
-        var y = center_y;
-        var size = ~~random(max_size,2.4);
-        var x_vel = ((max_size + min_vel) - size)/2 - (Math.random() * ((max_size + min_vel) - size));
-        var y_vel = ((max_size + min_vel) - size)/2 - (Math.random() * ((max_size + min_vel) - size));
-        var nx = x;
-        var ny = y;
-        var r,g,b,a = 0.05 * size;
-        
-        this.draw = function(){
-            r = ~~( 255 * ( x / width));
-            g = ~~( 255 * (1 - ( y / height)));
-            b = ~~( 255 - r );
-            ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
-            ctx.beginPath();
-            ctx.arc(x,y,size,0, Math.PI*2, true); 
-            ctx.closePath();
-            ctx.fill();
+
+    self.resume = function () {
+        self.paused = false;
+        self.prevTime = Date.now();
+        self.countdown();
+    };
+
+    self.countdown = function () {
+        if (!self.paused) {
+//            var prevSelfTime = self.timeLeft;
+            self.timeLeft = self.timeLeft - (self.prevTime ? (Date.now() - self.prevTime) : 17);
+            self.prevTime = Date.now();
+            self.updateCircle(self.totalTime - self.timeLeft, self.totalTime);
+//            console.log(String(self.timeLeft) + "," + String(prevSelfTime))
+//            if (prevSelfTime < self.timeLeft)
+//                alert(self.timeLeft);
+            self.updateText(self.timeLeft);
+            if (self.timeLeft > 0) requestAnimationFrame(self.countdown);
+            else if (self.endCallback) self.endCallback();
         }
+    };
 
-        this.move = function(dt){
+    self.updateCircle = function (progress, max) {
+        var percent = max == -1 ? 1 : (progress / max < 1 ? progress / max : 0);
+        self.ctx.putImageData(self.imd, 0, 0);
+        self.ctx.beginPath();
+        self.ctx.arc(120, 120, 70, -(self.quart), ((self.circ) * percent) - self.quart, true);
+        self.ctx.stroke();
+    };
 
-            nx += x_vel * dt;
-            ny += y_vel * dt;
-            if( !isInsideHeart(nx,ny)){
-                if( !isInsideHeart(nx,y)){
-                        x_vel *= -1;
-                        return;
-                }
-                if( !isInsideHeart(x,ny)){
-                        y_vel *= -1;
-                        return;
-                }
-                // Lets do the crazy furbidden
-                x_vel = -1 * y_vel;
-                y_vel = -1 * x_vel;
-                return;
-            }
-            x = nx;
-            y = ny;
-        }
-
-    }
-    function movementTick(){
-        if (!pause) {
-            var len = particles.length;
-            dead = max_particles - len;
-            for( var i = 0; i < dead && i < max_generation_per_frame; i++ ){
-                particles.push(new Particle());
-            }
-            
-            // Update the date
-            now = Date.now();
-            dt = last - now;
-            dt /= 1000;
-            particles.forEach(function(p){
-                p.move(dt);
-            });
-        }
-        last = now;
-    }
-    function tick(){
-
-        ctx.clearRect(0,0,width,height);
-        particles.forEach(function(p){
-            p.draw();
-        });
-        
-        if (!pause)
-            requestAnimationFrame(tick);
-    }
-    this.start = function(){
-        setInterval(movementTick,16);
-        tick();
-    }
-    this.done = function(){
-
-    }
-    this.pause = function(){
-        pause = true;
-        console.log("paused");
-    }
-    this.resume = function(){
-        pause = false;
-        console.log("resumed");         
-        tick();      
-    }
+    self.updateText = function (remainder) {
+        var text = remainder > 0 ? Math.ceil(remainder / 1000) : 0;
+        self.rt.innerHTML = text;
+    };
 }
-var loader = new Loadr("loader");
-loader.start();*/

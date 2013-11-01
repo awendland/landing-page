@@ -42,7 +42,6 @@ body > header {
         position: absolute;
         left: 100%;
         opacity: 0;
-        display: none;
         padding-bottom: 1em;
         
         &.present {
@@ -159,14 +158,15 @@ body > header {
                     height: 1.5em;
                     display: inline-block;
                     margin-right: .5em;
+                    background-size: cover;
                 }
                 
                 .google-play-store {
-                    content: url("http://developer.android.com/images/brand/Google_Play_Store_48.png");
+                    background-image: url("http://developer.android.com/images/brand/Google_Play_Store_48.png");
                 }
                 
                 .github {
-                    content: url("https://github.com/favicon.ico");
+                    background-image: url("https://github.com/favicon.ico");
                 }
             }
         }
@@ -176,19 +176,18 @@ body > header {
 .blog {
     text-align: center;
     vertical-align: center;
-    margin-top: 12em;
-    a {
-        text-decoration: none;
-        font-family: 'Open Sans';
-        font-weight: 300;
-        font-style: italic;
-        color: #F38630;
-        font-size: 2em;
-        letter-spacing: 2px;
-    }
-    
-    a:hover, a:focus {
-        text-decoration: underline;
+    #countdown {
+        width: 240px;
+        height: 240px;
+        position: relative;
+        margin: 0 auto;
+        
+        .countdown-text {
+            color: #F38630;
+            font-size: 4em;
+            font-family: 'Open Sans';
+            height: 1.5em;
+        }
     }
 }
 
@@ -236,9 +235,6 @@ body > header {
                 
         }
     }
-    .blog {
-        margin-top: 5em;
-    }
 }
 
 @media screen and (max-width: 28em) {
@@ -260,11 +256,6 @@ body > header {
                     }
                 }
             }
-        }
-    }
-    .blog {
-        a {
-            letter-spacing: 0;
         }
     }
 }
