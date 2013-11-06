@@ -150,20 +150,27 @@ function CountdownCircle(elem, opt) {
     self.circ = Math.PI * 2;
     self.quart = Math.PI / 2;
     
+    self.devicePixelRatio = window.devicePixelRatio;
+    
     // Get config
     opt = opt || {};
     self.conf = {
         color: opt.color || '#bc360a',
-        lineWidth: opt.lineWidth || 20.0,
+        lineWidth: opt.lineWidth || 20.0 * (self.devicePixelRatio || 1),
         height: opt.height || elem.offsetHeight,
         width: opt.width || elem.offsetWidth
     };
     
+    self.conf.hdHeight = opt.hdHeight || self.conf.height * (self.devicePixelRatio || 1);
+    self.conf.hdWidth = opt.hdHeight || self.conf.width * (self.devicePixelRatio || 1);
+    
     // Setup generated element layout-styles
     self.main.height = self.conf.height;
     self.main.width = self.conf.width;
-    self.bg.width = self.conf.width;
-    self.bg.height = self.conf.height;
+    self.bg.width = self.conf.hdWidth;
+    self.bg.height = self.conf.hdHeight;
+    self.bg.style.width = String(self.conf.width) + "px";
+    self.bg.style.height = String(self.conf.height) + "px";
     self.rt.style.position = "absolute";
     console.log(self.rt.style.fontSize);
     self.rt.style.top = String((self.conf.height - self.rt.offsetHeight) / 2) + "px";
@@ -179,7 +186,7 @@ function CountdownCircle(elem, opt) {
     self.ctx.lineWidth = self.conf.lineWidth;
     
     // Store blank canvas data
-    self.imd = self.ctx.getImageData(0, 0, self.conf.width, self.conf.height);
+    self.imd = self.ctx.getImageData(0, 0, self.conf.hdWidth, self.conf.hdHeight);
 
     // Countdown timers
     self.timeLeft;
@@ -265,7 +272,7 @@ function CountdownCircle(elem, opt) {
         var percent = max == -1 ? 1 : (progress / max < 1 ? progress / max : 0);
         self.ctx.putImageData(self.imd, 0, 0);
         self.ctx.beginPath();
-        self.ctx.arc(120, 120, 70, -(self.quart), ((self.circ) * percent) - self.quart, true);
+        self.ctx.arc(self.conf.hdWidth / 2, self.conf.hdWidth / 2, Math.min(self.conf.hdWidth, self.conf.hdHeight) / 4, -(self.quart), ((self.circ) * percent) - self.quart, true);
         self.ctx.stroke();
     };
 
