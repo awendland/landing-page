@@ -91,20 +91,19 @@ function state_change(newPage) {
 function slide(currPage, nextPage, direction) {
     currPage.animate({
             left: String(direction*100) + '%',
-            opacity: '0',
-            display: 'none',
+            opacity: '0'
         }, 500, function() {
             currPage.removeClass('present');
-            currPage.css("display", "");
             currPage.trigger("pageHide");
         });
     nextPage.offset({left: String(direction*100) + "%"});
-    nextPage.css('display', 'block');
+    nextPage.addClass('transition');
     nextPage.animate({
             left: '0%',
             opacity: '1',
         }, 500, function() {
             nextPage.addClass('present');
+            currPage.removeClass('transition');
             nextPage.trigger("pageShow");
         });
 }
@@ -152,13 +151,26 @@ function CountdownCircle(elem, opt) {
     
     self.devicePixelRatio = window.devicePixelRatio;
     
+    self.parentDisplayRecursion = function (item, hiddenList) {
+        if (item.offsetHeight === 0 || item.offsetWidth === 0) {
+            hiddenList.push(item);
+            item.style.display = "block";
+        }
+        if (item.parentElement)
+            self.parentDisplayRecursion(item.parentElement, hiddenList);
+    }
+    
+    //Temporarily display to far left to measure dimens
+    self.hiddenParentNodes = new Array();
+    self.parentDisplayRecursion(self.main, self.hiddenParentNodes);
+    
     // Get config
     opt = opt || {};
     self.conf = {
         color: opt.color || '#bc360a',
         lineWidth: opt.lineWidth || 20.0 * (self.devicePixelRatio || 1),
-        height: opt.height || elem.offsetHeight,
-        width: opt.width || elem.offsetWidth
+        height: opt.height || self.main.offsetHeight,
+        width: opt.width || self.main.offsetWidth
     };
     
     self.conf.hdHeight = opt.hdHeight || self.conf.height * (self.devicePixelRatio || 1);
@@ -177,7 +189,12 @@ function CountdownCircle(elem, opt) {
     self.rt.style.left = "0px"
     self.rt.style.textAlign = "center";
     self.rt.style.width = "100%";
-
+    
+    // Return temporarily hidden/moved
+    for (var i = 0; i < self.hiddenParentNodes.length; i++) {
+        self.hiddenParentNodes[i].style.display = "";
+    }
+    
     // Setup canvas styles
     self.ctx.beginPath();
     self.ctx.strokeStyle = self.conf.color;

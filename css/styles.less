@@ -42,7 +42,12 @@ body > header {
         position: absolute;
         left: 100%;
         opacity: 0;
+        display: none;
         padding-bottom: 1em;
+        
+        &.transition {
+            display: block;
+        }
         
         &.present {
             left: 0%;

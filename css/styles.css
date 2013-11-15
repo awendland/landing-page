@@ -41,7 +41,11 @@ body > header h2 {
   position: absolute;
   left: 100%;
   opacity: 0;
+  display: none;
   padding-bottom: 1em;
+}
+.slider .page.transition {
+  display: block;
 }
 .slider .page.present {
   left: 0%;
