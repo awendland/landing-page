@@ -168,7 +168,7 @@ function CountdownCircle(elem, opt) {
     opt = opt || {};
     self.conf = {
         color: opt.color || '#bc360a',
-        lineWidth: opt.lineWidth || 20.0 * (self.devicePixelRatio || 1),
+        lineWidth: opt.lineWidth || 25.0 * (self.devicePixelRatio || 1),
         height: opt.height || self.main.offsetHeight,
         width: opt.width || self.main.offsetWidth
     };
@@ -289,7 +289,7 @@ function CountdownCircle(elem, opt) {
         var percent = max == -1 ? 1 : (progress / max < 1 ? progress / max : 0);
         self.ctx.putImageData(self.imd, 0, 0);
         self.ctx.beginPath();
-        self.ctx.arc(self.conf.hdWidth / 2, self.conf.hdWidth / 2, Math.min(self.conf.hdWidth, self.conf.hdHeight) / 4, -(self.quart), ((self.circ) * percent) - self.quart, true);
+        self.ctx.arc(self.conf.hdWidth / 2, self.conf.hdWidth / 2, Math.min(self.conf.hdWidth, self.conf.hdHeight) / 3, -(self.quart), ((self.circ) * percent) - self.quart, true);
         self.ctx.stroke();
     };
 
