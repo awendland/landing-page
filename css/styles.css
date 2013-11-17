@@ -29,9 +29,9 @@ body {
 }
 body > header {
   margin: 3em auto 0 auto;
+  text-align: center;
 }
 body > header h2 {
-  text-align: center;
   line-height: 1;
   font-family: "open sans";
   font-size: 3em;
@@ -84,7 +84,6 @@ body > header h2 {
 .slider .page .container > header h1 {
   text-transform: uppercase;
   font-size: 6em;
-  margin-top: -0.1em;
 }
 .grid {
   margin-top: 3em;
@@ -184,6 +183,7 @@ body > header h2 {
     top: 100%;
   }
   .slider .page .container > header h1 {
+    margin-top: -0.1em;
     font-size: 5em;
   }
   .grid {
@@ -234,6 +234,46 @@ body > header h2 {
   }
   .grid article {
     margin-bottom: 1.5em;
+  }
+  .dashed-shadow {
+    position: relative;
+    top: 8px;
+    left: 8px;
+    display: inline-block;
+  }
+  .dashed-shadow:before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    bottom: -2px;
+    right: -2px;
+    z-index: 1;
+    background-image: -webkit-linear-gradient(45deg, #f7f4e0 12.5%, rgba(247, 244, 224, 0) 12.5%, rgba(247, 244, 224, 0) 37.5%, #f7f4e0 37.5%, #f7f4e0 62.5%, rgba(247, 244, 224, 0) 62.5%, rgba(247, 244, 224, 0) 87.5%, #f7f4e0 87.5%);
+    background-image: -moz-linear-gradient(45deg, #f7f4e0 12.5%, rgba(247, 244, 224, 0) 12.5%, rgba(247, 244, 224, 0) 37.5%, #f7f4e0 37.5%, #f7f4e0 62.5%, rgba(247, 244, 224, 0) 62.5%, rgba(247, 244, 224, 0) 87.5%, #f7f4e0 87.5%);
+    background-image: -o-linear-gradient(45deg, #f7f4e0 12.5%, rgba(247, 244, 224, 0) 12.5%, rgba(247, 244, 224, 0) 37.5%, #f7f4e0 37.5%, #f7f4e0 62.5%, rgba(247, 244, 224, 0) 62.5%, rgba(247, 244, 224, 0) 87.5%, #f7f4e0 87.5%);
+    background-image: linear-gradient(45deg, #f7f4e0 12.5%, rgba(247, 244, 224, 0) 12.5%, rgba(247, 244, 224, 0) 37.5%, #f7f4e0 37.5%, #f7f4e0 62.5%, rgba(247, 244, 224, 0) 62.5%, rgba(247, 244, 224, 0) 87.5%, #f7f4e0 87.5%);
+    background-size: 6px 6px;
+  }
+  .dashed-shadow:after {
+    z-index: 2;
+    content: attr(data-text);
+    position: absolute;
+    left: -8px;
+    top: -8px;
+    color: black;
+    text-shadow: 3px 3px #F7F4E0;
+  }
+  .dashed-shadow.right:after {
+    left: 8px;
+    text-shadow: -3px 3px #f7f4e0;
+  }
+  .dashed-shadow.right:before {
+    background-image: -webkit-linear-gradient(-45deg, #f7f4e0 12.5%, rgba(247, 244, 224, 0) 12.5%, rgba(247, 244, 224, 0) 37.5%, #f7f4e0 37.5%, #f7f4e0 62.5%, rgba(247, 244, 224, 0) 62.5%, rgba(247, 244, 224, 0) 87.5%, #f7f4e0 87.5%);
+    background-image: -moz-linear-gradient(-45deg, #f7f4e0 12.5%, rgba(247, 244, 224, 0) 12.5%, rgba(247, 244, 224, 0) 37.5%, #f7f4e0 37.5%, #f7f4e0 62.5%, rgba(247, 244, 224, 0) 62.5%, rgba(247, 244, 224, 0) 87.5%, #f7f4e0 87.5%);
+    background-image: -o-linear-gradient(-45deg, #f7f4e0 12.5%, rgba(247, 244, 224, 0) 12.5%, rgba(247, 244, 224, 0) 37.5%, #f7f4e0 37.5%, #f7f4e0 62.5%, rgba(247, 244, 224, 0) 62.5%, rgba(247, 244, 224, 0) 87.5%, #f7f4e0 87.5%);
+    background-image: linear-gradient(-45deg, #f7f4e0 12.5%, rgba(247, 244, 224, 0) 12.5%, rgba(247, 244, 224, 0) 37.5%, #f7f4e0 37.5%, #f7f4e0 62.5%, rgba(247, 244, 224, 0) 62.5%, rgba(247, 244, 224, 0) 87.5%, #f7f4e0 87.5%);
   }
 }
 @media screen and (min-width: 48em) {
