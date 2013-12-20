@@ -1,5 +1,14 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:800,300,400);
 
+html {
+    /* Keep page-jerk from happening when transitioning between longer and shorter pages */
+    overflow-y: scroll;
+    /* Keep mobile devices from adjusting font-size */
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
 body, h1, h2, h3, h4, h5, ul, li, html, p {
     margin: 0px;
     padding: 0px;
