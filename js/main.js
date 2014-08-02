@@ -123,7 +123,7 @@ function slide(currPage, nextPage, direction) {
 // Experiencing errors with unloaded DOM and double-triggers
 var countdown = new CountdownCircle(document.getElementById("countdown"));
 countdown.onDelayedEnd(function() {
-    window.location.href = "http://alexwendland.com/blog";
+    window.location.href = "http://blog.alexwendland.com";
 }, 1000);
 countdown.create(5000);
 $('[name="blog"]').on("pageShow", function() {
